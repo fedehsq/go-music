@@ -1,2 +1,2 @@
 # go-music
-Music streaming web app
+Music streaming web app using Deezer API
