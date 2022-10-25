@@ -14,12 +14,11 @@
         href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
 
     <script>
-        function download() {
-            console.log("download");
-            {{ range.songs }}
+        function downloadAll() {
+            "{{ range.songs }}"
             if (document.getElementById("audio{{.Id}}").getAttribute("status") != "finished") {
-                console.log("refreshing song {{.Title}} {{.Id}}");
-                $.get({{ .Url }}, function (data, status) {
+                console.log("{{.Id}} is not finished");
+                $.get("{{ .Url }}", function (data, status) {
                     if (data.status == "finished") {
                         document.getElementById("audio{{.Id}}").src = data.force;
                         document.getElementById("audio{{.Id}}").setAttribute("status", "finished");
@@ -28,15 +27,15 @@
                     }
                 });
             }
-            {{ end }}
+            "{{ end }}"
         }
     </script>
 
     <script>
-        setInterval(download, 3000);
+        setInterval(downloadAll, 3000);
         $(document).ready(function () {
             console.log("ready!");
-            download();
+            downloadAll();
         });
     </script>
 </head>
@@ -44,7 +43,7 @@
 <body style="background-color: #1b1b1b; font-family: 'Open Sans', sans-serif; color: white; width: 100%;">
     <div class="container mt-3">
         <div class="row">
-                <h1> {{ .title }}</h1>
+            <h1> {{ .title }}</h1>
             <div class="col" style="margin: auto;">
                 <!-- Music search form -->
                 <form class="form-inline mb-0" action="/search" method="GET">
@@ -66,13 +65,21 @@
             Titolo
         </div>
         {{ range .songs }}
-        <div class="row">
-            <img src="{{ .Artist.Picture }}" class="img ml-2" style="width: 45px; height: 45px;" alt="Responsive image">
+        <div class="row mb-3" id="songRow{{.Id}}">
+            <div class="col-1" style="margin: auto;">
+                <a href="#">
+                    <span id="playIcon{{.id}}" class="material-symbols-outlined">
+                        play_arrow
+                    </span>
+                </a>
+            </div>
+            <div class="col-1">
+                <img src="{{ .Artist.Picture }}" class="img ml-2" style="width: 45px; height: 45px;"
+                    alt="Responsive image">
+            </div>
             <div class="col">
-                <p>
-                    <small style="font-weight: bold;">{{ .Title }}</small> <br>
-                    <small class="text-muted">{{ .Artist.Name }}</small>
-                </p>
+                <small style="font-weight: bold;">{{ .Title }}</small> <br>
+                <small class="text-muted">{{ .Artist.Name }}</small>
             </div>
             <div class="col d-md text-right">
                 <audio controls id="audio{{.Id}}">
@@ -84,4 +91,5 @@
         <br>
         {{ end }}
     </div>
+    <div id="playBottomBanner" style="background-color: #424242;" class="fixed-bottom">bei</div>
 </body>

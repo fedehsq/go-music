@@ -2,39 +2,32 @@ package views
 
 import (
 	"encoding/json"
-	//"fmt"
-	"go-music/music/song"
+	"fmt"
+	"go-music/music"
+	"go-music/config"
 	"html/template"
 	"log"
 	"net/http"
 )
 
 type Songs struct {
-	Data []song.Song
+	Songs []music.Song `json:"data"`
 }
 
-type SongStruct struct {
-	Force string
-}
-
-const (
-	searchUrl   = "https://api.deezer.com/search?q="
-	topItalians = "https://api.deezer.com/playlist/65489479/tracks"
-)
 
 func createHtmlResponse(r *http.Response, pageTitle string) map[string]interface{} {
 	var songs Songs
 	json.NewDecoder(r.Body).Decode(&songs)
-	// for i := 0; i < len(songs.Data); i++ {
-	// 	url := songUrl + fmt.Sprintf("%d", songs.Data[i].Id)
-	// 	songs.Data[i].Url = url
-	// }
-	return map[string]interface{}{"songs": songs.Data, "title": pageTitle}
+	for i := 0; i < len(songs.Songs); i++ {
+		url := config.Conf.SongUrl + fmt.Sprintf("%d", songs.Songs[i].Id)
+		songs.Songs[i].Url = url
+	}
+	return map[string]interface{}{"songs": songs.Songs, "title": pageTitle}
 }
 
 func Search(w http.ResponseWriter, r *http.Request) {
 	data := r.URL.Query().Get("search")
-	resp, err := http.Get(searchUrl + data)
+	resp, err := http.Get(config.Conf.SearchURL + data)
 	if err != nil {
 		log.Fatalln(err)
 	}
@@ -46,7 +39,7 @@ func Search(w http.ResponseWriter, r *http.Request) {
 }
 
 func Index(w http.ResponseWriter, r *http.Request) {
-	resp, err := http.Get(topItalians)
+	resp, err := http.Get(config.Conf.TopItaliansURL)
 	if err != nil {
 		log.Fatalln(err)
 	}

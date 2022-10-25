@@ -1,4 +1,4 @@
-package album
+package music
 
 type Album struct {
 	Id int
