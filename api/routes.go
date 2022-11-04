@@ -1,11 +1,10 @@
-package views
+package api
 
 import (
 	"encoding/json"
 	"fmt"
-	"go-music/music"
-	"go-music/config"
-	"html/template"
+	"github.com/fedehsq/go-music/music"
+	"github.com/fedehsq/go-music/config"
 	"log"
 	"net/http"
 )
@@ -14,7 +13,13 @@ type Songs struct {
 	Songs []music.Song `json:"data"`
 }
 
+func (s *Songs) getDownloadUrl() {
+	for i := 0; i < len(s.Songs); i++ {
+		s.Songs[i].Url = config.Conf.SongUrl + fmt.Sprintf("%d", s.Songs[i].Id)
+	}
+}
 
+/*
 func createHtmlResponse(r *http.Response, pageTitle string) map[string]interface{} {
 	var songs Songs
 	json.NewDecoder(r.Body).Decode(&songs)
@@ -37,15 +42,19 @@ func Search(w http.ResponseWriter, r *http.Request) {
 	}
 	t.Execute(w, createHtmlResponse(resp,"Risultati ricerca per: " + data))
 }
+*/
 
-func Index(w http.ResponseWriter, r *http.Request) {
+
+func GetTopItalians(w http.ResponseWriter, r *http.Request) {
 	resp, err := http.Get(config.Conf.TopItaliansURL)
 	if err != nil {
 		log.Fatalln(err)
 	}
-	t, err := template.ParseFiles("tmpl/index.html")
-	if err != nil {
-		log.Fatalln(err)
-	}
-	t.Execute(w, createHtmlResponse(resp, "Top 50 Italia"))
+	var songs Songs
+	json.NewDecoder(resp.Body).Decode(&songs)
+	// Apply the url to each song without looping
+	songs.getDownloadUrl()
+	// write the response as json
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(songs)
 }

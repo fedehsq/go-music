@@ -1,0 +1,28 @@
+<div style="background-color: #1b1b1b;">
+    <tr *ngFor="let song of topItalians">
+        <div class="row mb-3">
+            <div class="col-1" style="margin: auto;">
+                <a href="#">
+                    <span class="material-symbols-outlined">
+                        play_arrow
+                    </span>
+                </a>
+            </div>
+            <div class="col">
+                <img src="{{ song.artist?.picture }}" class="img ml-2" style="width: 45px; height: 45px;"
+                    alt="Responsive image">
+            </div>
+            <div class="col">
+                <small style="font-weight: bold;">{{ song.title }}</small> <br>
+                <small class="text-muted">{{ song.artist?.name }}</small>
+            </div>
+            <div class="col">
+                <audio controls>
+                    <source src="{{ song.preview }}" type="audio/ogg">
+                    <source src="{{ song.preview }}" type="audio/mpeg">
+                </audio>
+            </div>
+        </div>
+        <br>
+    </tr>
+</div>

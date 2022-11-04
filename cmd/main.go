@@ -2,12 +2,14 @@ package main
 
 import (
 	"fmt"
-	"go-music/config"
-	"go-music/views"
 	"log"
 	"net/http"
 	"strings"
 	"time"
+
+	"github.com/fedehsq/go-music/api"
+	"github.com/fedehsq/go-music/config"
+	"github.com/rs/cors"
 
 	"github.com/gorilla/mux"
 )
@@ -18,13 +20,18 @@ func main() {
 		log.Fatal(err)
 	}
 	r := mux.NewRouter()
-	r.HandleFunc("/", views.Index).Methods("GET")
-	r.HandleFunc("/search", views.Search).Methods("GET")
+	// Solves Cross Origin Access Issue
+	c := cors.New(cors.Options{
+		AllowedOrigins: []string{"http://localhost:4200"},
+	})
+	r.HandleFunc("/get-top-italians", api.GetTopItalians).Methods("GET")
+	handler := c.Handler(r)
+	//r.HandleFunc("/search", views.Search).Methods("GET")
 	// serve static files
 	r.PathPrefix("/static/").Handler(http.StripPrefix("/static/", http.FileServer(http.Dir("static"))))
 	srv := &http.Server{
-		Handler: r,
-		Addr:    strings.ReplaceAll(config.Conf.Server, "http://", ""),
+		Handler:      handler,
+		Addr:         strings.ReplaceAll(config.Conf.Server, "http://", ""),
 		WriteTimeout: 15 * time.Second,
 		ReadTimeout:  15 * time.Second,
 	}
