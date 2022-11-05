@@ -5,10 +5,10 @@ import (
 )
 
 type Config struct {
-	Server string `mapstructure:"server"`
-	SearchURL string `mapstructure:"search_url"`
-	TopItaliansURL string `mapstructure:"top_italians"`
-	SongUrl string `mapstructure:"song_url"`
+	Server string `mapstructure:"SERVER"`
+	SearchUrl string `mapstructure:"SEARCH_URL"`
+	PlaylistUrl string `mapstructure:"PLAYLIST_URL"`
+	SongUrl string `mapstructure:"SONG_URL"`
 }
 
 var Conf *Config
@@ -16,7 +16,7 @@ var Conf *Config
 func LoadConfig(path string) error {
 	viper.AddConfigPath(path)
 	viper.SetConfigName("config")
-	viper.SetConfigType("json")
+	viper.SetConfigType(".env")
 	viper.AutomaticEnv()
 	err := viper.ReadInConfig()
 	if err != nil {

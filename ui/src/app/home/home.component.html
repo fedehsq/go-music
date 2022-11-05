@@ -1,11 +1,9 @@
-<div style="background-color: #1b1b1b;">
+<div class="container">
     <tr *ngFor="let song of topItalians">
         <div class="row mb-3">
             <div class="col-1" style="margin: auto;">
                 <a href="#">
-                    <span class="material-symbols-outlined">
-                        play_arrow
-                    </span>
+                  <i class="fa fa-play"></i>
                 </a>
             </div>
             <div class="col">
@@ -13,7 +11,7 @@
                     alt="Responsive image">
             </div>
             <div class="col">
-                <small style="font-weight: bold;">{{ song.title }}</small> <br>
+                <small style="font-weight: bold; color:aliceblue">{{ song.title }}</small> <br>
                 <small class="text-muted">{{ song.artist?.name }}</small>
             </div>
             <div class="col">
@@ -25,4 +23,4 @@
         </div>
         <br>
     </tr>
-</div>
+  </div>

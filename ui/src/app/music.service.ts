@@ -7,7 +7,7 @@ export class MusicService {
   constructor(private httpClient: HttpClient) { }
 
   getTopItalians() {
-    return this.httpClient.get(environment.gateway + '/get-top-italians');
+    return this.httpClient.get<Song[]>(environment.gateway + '/get-top-italians');
   }
 
 }

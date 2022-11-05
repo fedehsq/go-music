@@ -1,6 +1,0 @@
-{
-    "server": "http://localhost:8080",
-    "search_url": "https://api.deezer.com/search?q=",
-    "top_italians": "https://api.deezer.com/playlist/65489479/tracks",
-    "song_url": "https://hub.ilill.li/?id="
-}

@@ -13,12 +13,11 @@ export class HomeComponent implements OnInit {
   constructor(private musicService: MusicService) { }
 
   ngOnInit() {
-    console.log('qua!');
     this.getTopItalians();
   }
 
   getTopItalians() {
-    this.musicService.getTopItalians().subscribe((data: any) => {
+    this.musicService.getTopItalians().subscribe((data: Song[]) => {
       this.topItalians = data;
     });
   }
