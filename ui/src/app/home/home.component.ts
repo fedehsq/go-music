@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { MusicService, Song } from '../music.service';
+import { MusicService, ChartPlaylist } from '../music.service';
 
 @Component({
   selector: 'app-home',
@@ -8,17 +8,17 @@ import { MusicService, Song } from '../music.service';
 })
 export class HomeComponent implements OnInit {
 
-  topItalians: Song[] | undefined;
+  chartPlaylists: ChartPlaylist[] | undefined;
 
   constructor(private musicService: MusicService) { }
 
   ngOnInit() {
-    this.getTopItalians();
+    this.getChartPlaylists();
   }
 
-  getTopItalians() {
-    this.musicService.getTopItalians().subscribe((data: Song[]) => {
-      this.topItalians = data;
+  getChartPlaylists() {
+    this.musicService.getChartPlaylists().subscribe((data: ChartPlaylist[]) => {
+      this.chartPlaylists = data;
     });
   }
 

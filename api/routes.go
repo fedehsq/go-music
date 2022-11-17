@@ -6,30 +6,38 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/fedehsq/go-music/config"
-	"github.com/fedehsq/go-music/music"
+	"github.com/fedehsq/go-music/models"
 )
 
-type Songs struct {
-	Songs []music.Song `json:"data"`
-}
+const (
+	playlistUrl      = "https://api.deezer.com/playlist"
+	tracksUrl        = "https://api.deezer.com/track"
+	artistUrl        = "https://api.deezer.com/artist"
+	albumUrl         = "https://api.deezer.com/album"
+	chartPlaylistsUrl = "https://api.deezer.com/chart/0/playlists"
+)
 
-func (s *Songs) getDownloadUrl() {
-	for i := 0; i < len(s.Songs); i++ {
-		s.Songs[i].Url = config.Conf.SongUrl + fmt.Sprintf("%d", s.Songs[i].Id)
-	}
-}
-
-func GetPlaylistSongs(w http.ResponseWriter, r *http.Request) {
+func Playlist(w http.ResponseWriter, r *http.Request) {
 	// Get the playlist id from the url
 	playlistId := r.URL.Query().Get("id")
-	resp, err := http.Get(fmt.Sprintf("%s/%s/tracks", config.Conf.PlaylistUrl, playlistId))
+	resp, err := http.Get(fmt.Sprintf("%s/%s", playlistUrl, playlistId))
 	if err != nil {
 		log.Fatalln(err)
 	}
-	var songs Songs
-	json.NewDecoder(resp.Body).Decode(&songs)
-	songs.getDownloadUrl()
+	var playlist models.Playlist
+	json.NewDecoder(resp.Body).Decode(&playlist)
+	playlist.Tracks.SetDownloadUrls()
 	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(songs.Songs)
+	json.NewEncoder(w).Encode(playlist)
+}
+
+func ChartPlaylists(w http.ResponseWriter, r *http.Request) {
+	resp, err := http.Get(chartPlaylistsUrl)
+	if err != nil {
+		log.Fatalln(err)
+	}
+	chartPlaylists := models.ChartPlaylists{}
+	json.NewDecoder(resp.Body).Decode(&chartPlaylists)
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(chartPlaylists.Playlists)
 }

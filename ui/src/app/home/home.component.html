@@ -1,26 +1,12 @@
 <div class="container">
-    <tr *ngFor="let song of topItalians">
-        <div class="row mb-3">
-            <div class="col-1" style="margin: auto;">
-                <a href="#">
-                  <i class="fa fa-play"></i>
-                </a>
+    <tr *ngFor="let playlist of chartPlaylists">
+        <td>
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">{{playlist.title}}</h5>
+                    <img src="{{playlist.picture_big}}" alt="Card image cap">
+                </div>
             </div>
-            <div class="col">
-                <img src="{{ song.artist?.picture }}" class="img ml-2" style="width: 45px; height: 45px;"
-                    alt="Responsive image">
-            </div>
-            <div class="col">
-                <small style="font-weight: bold; color:aliceblue">{{ song.title }}</small> <br>
-                <small class="text-muted">{{ song.artist?.name }}</small>
-            </div>
-            <div class="col">
-                <audio controls>
-                    <source src="{{ song.preview }}" type="audio/ogg">
-                    <source src="{{ song.preview }}" type="audio/mpeg">
-                </audio>
-            </div>
-        </div>
-        <br>
+        </td>
     </tr>
-  </div>
+</div>

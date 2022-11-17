@@ -24,7 +24,8 @@ func main() {
 	c := cors.New(cors.Options{
 		AllowedOrigins: []string{"http://localhost:4200"},
 	})
-	r.HandleFunc("/playlist-songs", api.GetPlaylistSongs).Methods("GET")
+	r.HandleFunc("/playlist", api.Playlist).Methods("GET")
+	r.HandleFunc("/chart-playlists", api.ChartPlaylists).Methods("GET")
 	handler := c.Handler(r)
 	//r.HandleFunc("/search", views.Search).Methods("GET")
 	// serve static files
